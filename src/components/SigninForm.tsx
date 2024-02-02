@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import Container from "./ui/Container";
 import Link from "next/link";
 
+const randomString = () => Math.random().toString(36).substring(7);
 const FormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
   password: z

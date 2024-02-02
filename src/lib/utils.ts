@@ -1,6 +1,18 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
+}
+
+export function generateAccountNumber() {
+  const startingChar = String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+
+  const randomDigits = Math.floor(Math.random() * 1000000000)
+    .toString()
+    .padStart(9, "0");
+
+  const accountNumber = (startingChar + randomDigits).repeat(2);
+
+  return accountNumber.slice(0, 20);
 }
