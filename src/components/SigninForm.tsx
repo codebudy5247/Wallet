@@ -16,6 +16,7 @@ import Container from "./ui/Container";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const FormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -27,6 +28,9 @@ const FormSchema = z.object({
 
 const SigninForm = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -37,26 +41,33 @@ const SigninForm = () => {
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     try {
+      setLoading(true);
       const signInData = await signIn("credentials", {
         redirect: false,
         email: values.email,
         password: values.password,
       });
+      setLoading(false);
       if (signInData?.error) {
         console.log(signInData?.error);
+        setError("invalid email or password");
       } else {
         router.push("/");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      setLoading(false);
+      setError(error);
     }
   };
 
   return (
-    <Container className="w-1/4 sm:w-2/3">
+    <>
       <h1 className="font-extrabold text-center text-2xl mb-5">LOGIN</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+          {error && (
+            <p className="text-center bg-red-300 py-4 mb-6 rounded">{error}</p>
+          )}
           <div className="space-y-2">
             <FormField
               control={form.control}
@@ -103,7 +114,7 @@ const SigninForm = () => {
           </Link>
         </p>
       </Form>
-    </Container>
+    </>
   );
 };
 

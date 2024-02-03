@@ -67,7 +67,7 @@ const SignupForm = () => {
   };
 
   return (
-    <Container className="w-1/4 sm:w-2/3">
+    <>
       <h1 className="font-extrabold text-center text-2xl mb-5">
         CREATE YOUR ACCOUNT
       </h1>
@@ -149,7 +149,7 @@ const SignupForm = () => {
           </Link>
         </p>
       </Form>
-    </Container>
+    </>
   );
 };
 
