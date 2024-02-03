@@ -37,6 +37,7 @@ export async function POST(req: Request) {
         username,
         password: hashedPassword,
         accountNumber: uniqueAccountNumber,
+        accountBalance:0
       },
     });
     const { password: newUserPassword, ...rest } = newUser;
