@@ -14,8 +14,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import Container from "./ui/Container";
-
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z
   .object({
@@ -33,6 +33,7 @@ const FormSchema = z
   });
 
 const SignupForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -43,12 +44,33 @@ const SignupForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+    const response = await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+      }),
+    });
+    if (response.ok) {
+      let resData = await response.json();
+      console.log(resData);
+      router.push("/signin");
+    } else {
+      let errData = await response.json();
+      console.error(errData.message);
+    }
   };
+
   return (
     <Container className="w-1/4 sm:w-2/3">
-       <h1 className="font-extrabold text-center text-2xl mb-5">CREATE YOUR ACCOUNT</h1>
+      <h1 className="font-extrabold text-center text-2xl mb-5">
+        CREATE YOUR ACCOUNT
+      </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
           <div className="space-y-2">
