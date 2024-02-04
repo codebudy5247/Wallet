@@ -1,12 +1,14 @@
+'use client'
 import React from "react";
 import Link from "next/link";
-import { buttonVariants } from "./button";
+import { Button, buttonVariants } from "./ui/button";
 import { IndianRupee } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 const Navbar = () => {
   return (
     <>
-      <div className="py-2 bg-zinc-100 border-b border-m-zinc-200 fixed w-full z-10 top-0">
+      <div className="py-4 px-4 bg-zinc-100 border-b border-m-zinc-200 w-full z-10 top-0 mt-5 rounded-lg">
         <div className="container flex items-center justify-between">
           <Link href="/">
             {" "}
@@ -14,9 +16,9 @@ const Navbar = () => {
               <IndianRupee size={20} /> <span className="font-bold">PAY</span>{" "}
             </div>
           </Link>
-          <Link className={buttonVariants()} href="/signin">
-            Sign in
-          </Link>
+          <Button onClick={() => signOut()}>
+            Logout
+          </Button>
         </div>
       </div>
     </>

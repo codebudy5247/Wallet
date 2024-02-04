@@ -1,18 +1,31 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { User } from "@/components/user";
+import { getUserByEmail } from "@/lib/data";
+import Navbar from "@/components/Navbar";
+import Container from "@/components/ui/Container";
+import AccountBalance from "@/components/AccountBalance";
+import AccountInfo from "@/components/AccountInfo";
+import TransactionList from "@/components/TransactionList";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  console.log(session);
+  const userEmail = session?.user?.email as string;
+  const userInfo:any = await getUserByEmail(userEmail);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-around p-5">
-      <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Server Session
-      </h1>
-      <pre>{JSON.stringify(session)}</pre>
-      <User />
-    </main>
+    <>
+      <Container>
+        <Navbar />
+        <div className="grid md:grid-cols-[2fr_3fr] gap-6 mt-5">
+          <div className="flex flex-col gap-10">
+            <AccountBalance accountBalance={userInfo?.accountBalance} />
+            <AccountInfo user={userInfo} />
+          </div>
+          <div className="h-screen">
+           <TransactionList />
+          </div>
+        </div>
+      </Container>
+    </>
   );
 }

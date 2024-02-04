@@ -2,15 +2,12 @@
 
 import { useSession } from "next-auth/react";
 
-export const User = () => {
+export const User = (props: any) => {
   const { data: session } = useSession();
 
   return (
-    <>
-      <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Client Session
-      </h1>
-      <pre>{JSON.stringify(session)}</pre>
-    </>
-  );
+    <div>
+      {JSON.stringify(props.userInfo)}
+    </div>
+  )
 };
