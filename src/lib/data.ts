@@ -32,11 +32,25 @@ export const getUserByAccountNumber = async (accountNumber: string) => {
 };
 
 // Get all users
-export const getUsers = async () =>{
+export const getUsers = async () => {
   try {
-    const users = await db.user.findMany({})
-    return users
+    const users = await db.user.findMany({});
+    return users;
   } catch (error) {
-    return null
+    return null;
   }
-}
+};
+
+// Get all user transactions
+export const getUserTxs = async (userId: string) => {
+  try {
+    const userTransactions = await db.transaction.findMany({
+      where: {
+        OR: [{ senderId: userId }, { recieverId: userId }],
+      },
+    });
+    return userTransactions
+  } catch (error) {
+    return null;
+  }
+};

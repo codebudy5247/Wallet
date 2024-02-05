@@ -17,3 +17,13 @@ type createTx = {
   senderId:string;
   recieverId:string
 }
+
+type Transaction = {
+  id: string;
+  type: string;
+  message: string;
+  amount: number;
+  recieverAccountNumber: string;
+  senderId: string;
+  recieverId: string;
+};

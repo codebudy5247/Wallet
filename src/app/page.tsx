@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { getUserByEmail } from "@/lib/data";
+import { getUserByEmail,getUserTxs } from "@/lib/data";
 import Navbar from "@/components/Navbar";
 import Container from "@/components/ui/Container";
 import AccountBalance from "@/components/AccountBalance";
@@ -12,6 +12,9 @@ export default async function Home() {
   const userEmail = session?.user?.email as string;
   const userInfo:any = await getUserByEmail(userEmail);
 
+  const userTxs:any = await getUserTxs(userInfo.id)
+  console.log(userTxs);
+  
   return (
     <>
       <Container>
@@ -22,7 +25,7 @@ export default async function Home() {
             <AccountInfo user={userInfo} />
           </div>
           <div className="h-screen">
-           <TransactionList />
+           <TransactionList userId={userInfo.id} transactions={userTxs} />
           </div>
         </div>
       </Container>
