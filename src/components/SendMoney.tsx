@@ -30,7 +30,12 @@ type Props = {
 
 const SendMoneyFormSchema = z.object({
   accountNumber: z.string().min(1, "Account Number is required"),
-  amount: z.coerce.number().min(1, "Amount is required"),
+  amount: z.coerce
+    .number()
+    .int("Amount must be an integer")
+    .refine((value) => value >= 1, {
+      message: "Amount must be greater than or equal to 1",
+    }),
   description: z.string().optional(),
 });
 
