@@ -16,3 +16,8 @@ export function generateAccountNumber() {
 
   return accountNumber.slice(0, 20);
 }
+
+export const handleError = (error: unknown) => {
+  console.error(error)
+  throw new Error(typeof error === 'string' ? error : JSON.stringify(error))
+}

@@ -18,7 +18,7 @@ export default async function Home() {
         <Navbar />
         <div className="grid md:grid-cols-[2fr_3fr] gap-6 mt-5">
           <div className="flex flex-col gap-10">
-            <AccountBalance accountBalance={userInfo?.accountBalance} />
+            <AccountBalance userInfo={userInfo} />
             <AccountInfo user={userInfo} />
           </div>
           <div className="h-screen">

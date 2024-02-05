@@ -1,47 +1,130 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "./ui/label";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { sendMoney } from "@/lib/action";
 
-type Props = {};
+type Props = {
+  sender: User;
+  recieverList: User[];
+};
 
-function SendMoney({}: Props) {
+const SendMoneyFormSchema = z.object({
+  accountNumber: z.string().min(1, "Account Number is required"),
+  amount: z.coerce.number().min(1, "Amount is required"),
+  description: z.string().optional(),
+});
+
+function SendMoney({ sender, recieverList }: Props) {
+  const form = useForm<z.infer<typeof SendMoneyFormSchema>>({
+    resolver: zodResolver(SendMoneyFormSchema),
+    defaultValues: {
+      accountNumber: "",
+      amount: 0,
+      description: "",
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof SendMoneyFormSchema>) => {
+    const reciever = recieverList.filter(
+      (obj) => obj.accountNumber === values.accountNumber
+    );
+    try {
+      const payloadData: createTx = {
+        type: "",
+        message: values.description!,
+        amount: values.amount,
+        recieverAccountNumber: reciever[0].accountNumber,
+        senderId: sender.id,
+        recieverId: reciever[0].id,
+      };
+      const send_money = await sendMoney(
+        sender.accountBalance,
+        reciever[0].accountBalance,
+        payloadData
+      );
+      console.log(send_money);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger className="bg-blue-600 p-2 text-white rounded-md">
         Send Money
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="">
         <DialogHeader>
           <DialogTitle>Send Money</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Account Number
-            </Label>
-            <Input id="name" className="col-span-3" type="text" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Amount
-            </Label>
-            <Input id="username" className="col-span-3" type="number" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Description
-            </Label>
-            <Input id="username" className="col-span-3" />
-          </div>
-        </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
+            <div className="space-y-2 mb-5">
+              <FormField
+                control={form.control}
+                name="accountNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Account Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="A396572743A396572743" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Amount</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input placeholder="optional..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <DialogFooter>
+              <Button type="submit">Send</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

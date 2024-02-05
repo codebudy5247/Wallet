@@ -13,10 +13,10 @@ function AccountInfo({ user }: Props) {
 
       <div className="flex flex-col gap-2">
         <h6 className="font-semibold text-gray-400">
-          {user.username.toUpperCase()}
+          {user?.username?.toUpperCase()}
         </h6>
-        <h6 className="font-semibold text-gray-400">{user.accountNumber}</h6>
-        <h6 className="font-semibold text-gray-400">{user.email}</h6>
+        <h6 className="font-semibold text-gray-400">{user?.accountNumber}</h6>
+        <h6 className="font-semibold text-gray-400">{user?.email}</h6>
       </div>
     </div>
   );

@@ -8,3 +8,12 @@ type User = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+type createTx = {
+  type: string;
+  message: string;
+  amount:number;
+  recieverAccountNumber:string;
+  senderId:string;
+  recieverId:string
+}
