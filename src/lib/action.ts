@@ -1,5 +1,5 @@
 "use server";
-
+import { revalidatePath } from 'next/cache'
 import { db } from "@/lib/db";
 import { handleError } from "@/lib/utils";
 
@@ -46,6 +46,7 @@ export async function sendMoney(
         recieverId: txPayload.recieverId,
       },
     });
+    revalidatePath('/')
     return JSON.parse(JSON.stringify(newTx));
   } catch (error) {
     handleError(error);
