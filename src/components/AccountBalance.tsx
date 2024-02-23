@@ -9,7 +9,6 @@ type Props = {
 
 async function AccountBalance({ userInfo }: Props) {
    const users:any = await getUsers()
-   console.log(users);
    
   return (
     <div className="p-5 rounded-xl shadow-lg">

@@ -3,7 +3,6 @@ import { Separator } from "./ui/separator";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -11,7 +10,8 @@ import {
 } from "./ui/table";
 import { MoveUpRight } from "lucide-react";
 import { MoveDownLeft } from "lucide-react";
-
+import SenderDetails from "./SenderDetails";
+import RecieverDetails from "./RecieverDetails";
 type Props = {
   userId: string;
   transactions: Transaction[];
@@ -25,10 +25,8 @@ const TransactionList = ({ userId, transactions }: Props) => {
 
       <div>
         <Table>
-          <TableCaption>A list of your recent transactions.</TableCaption>
           <TableHeader>
             <TableRow>
-              {/* <TableHead className="w-[100px]">Type</TableHead> */}
               <TableHead>Message</TableHead>
               <TableHead>Account</TableHead>
               <TableHead>Amount</TableHead>
@@ -38,16 +36,13 @@ const TransactionList = ({ userId, transactions }: Props) => {
             {transactions &&
               transactions.map((tx, i) => (
                 <TableRow key={i}>
-                  {/* <TableCell className="font-medium">
-                    {userId === tx.senderId ? (
-                      <h6 className="text-red-500 font-semibold">Send</h6>
-                    ) : (
-                      <h6 className="text-green-500 font-semibold">Recieve</h6>
-                    )}
-                  </TableCell> */}
                   <TableCell className="font-medium">{tx.message}</TableCell>
                   <TableCell className="font-medium">
-                    {tx.recieverAccountNumber}
+                    {userId === tx.senderId ? (
+                      <RecieverDetails recieverID={tx.recieverId} />
+                    ) : (
+                      <SenderDetails senderID={tx.senderId} />
+                    )}
                   </TableCell>
                   <TableCell className="font-medium">
                     {userId === tx.senderId ? (

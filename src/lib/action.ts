@@ -9,6 +9,7 @@ export async function sendMoney(
   recieverAccountBalance: number,
   txPayload: createTx
 ) {
+  // TODO: Wrap it inside transaction
   try {
     if (!txPayload.recieverId) throw new Error("Reciever not found");
 

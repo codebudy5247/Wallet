@@ -48,6 +48,9 @@ export const getUserTxs = async (userId: string) => {
       where: {
         OR: [{ senderId: userId }, { recieverId: userId }],
       },
+      // orderBy:{
+      //   createdAt:"asc"
+      // }
     });
     return userTransactions
   } catch (error) {
