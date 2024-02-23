@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { authOptions } from "@/app/auth";
 import { getUserByEmail,getUserTxs } from "@/lib/data";
 import Navbar from "@/components/Navbar";
 import Container from "@/components/ui/Container";
